@@ -12,7 +12,13 @@ const getGeneratedFilePath = (fileType, options) => {
    *    -> src/comment/index/components/comment-list.vue
    */
 
-  const { [fileType]: fileName, path: filePath } = options;
+  let typeOption = fileType;
+
+  if (fileType === 'style') {
+    typeOption = 'component';
+  }
+
+  const { [typeOption]: fileName, path: filePath } = options;
 
   // 带后缀的文件名
   let fileFullName;
@@ -20,6 +26,9 @@ const getGeneratedFilePath = (fileType, options) => {
   switch (fileType) {
     case 'component':
       fileFullName = `${fileName}.vue`;
+      break;
+    case 'style':
+      fileFullName = path.join('styles', `${fileName}.css`);
       break;
   }
 
