@@ -17,7 +17,7 @@ const getTemplatePath = () => {
 const getComponentName = (options) => {
   const { component: componentName } = options;
   const componentNamePascalCase = startCase(camelCase(componentName)).replace(
-    ' ',
+    / /g,
     '',
   );
 
