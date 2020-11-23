@@ -1,4 +1,5 @@
 const { getGeneratedFilePath } = require('../app/app.service');
+const { getTemplatePath } = require('./component.service');
 
 const componentGenerator = (api, options) => {
   if (!options.component) return;
@@ -8,11 +9,14 @@ const componentGenerator = (api, options) => {
 
   // 组件样式表的存放位置
   const generatedStylePath = getGeneratedFilePath('style', options);
-  console.log(generatedStylePath);
 
-  // api.render({
-  //   'src/components/demo.vue': './templates/component.ejs',
-  // });
+  // 模板路径
+  const { componentTemplatePath, styleTemplatePath } = getTemplatePath();
+
+  api.render({
+    [generatedComponentPath]: componentTemplatePath,
+    [generatedStylePath]: styleTemplatePath,
+  });
 };
 
 module.exports = componentGenerator;
