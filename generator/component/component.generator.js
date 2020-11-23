@@ -16,10 +16,16 @@ const componentGenerator = (api, options) => {
   // 组件名
   const { componentName, componentNamePascalCase } = getComponentName(options);
 
-  api.render({
-    [generatedComponentPath]: componentTemplatePath,
-    [generatedStylePath]: styleTemplatePath,
-  });
+  api.render(
+    {
+      [generatedComponentPath]: componentTemplatePath,
+      [generatedStylePath]: styleTemplatePath,
+    },
+    {
+      componentName,
+      componentNamePascalCase,
+    },
+  );
 };
 
 module.exports = componentGenerator;

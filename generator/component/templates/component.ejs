@@ -1,12 +1,14 @@
 <template>
-  <div>ComponentName</div>
+  <div class="<%= componentName %>">
+    <%= componentNamePascalCase %>
+  </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'ComponentName',
+  name: '<%= componentNamePascalCase %>',
 
   /**
    * 属性
@@ -40,8 +42,11 @@ export default defineComponent({
   /**
    * 使用组件
    */
-  components: {},
+  components: {
+  },
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+@import './styles/<%= componentName %>.css';
+</style>
