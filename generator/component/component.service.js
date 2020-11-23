@@ -1,4 +1,5 @@
 const path = require('path');
+const { camelCase, startCase } = require('lodash');
 
 /**
  * 获取组件模板文件路径
@@ -10,6 +11,20 @@ const getTemplatePath = () => {
   return { componentTemplatePath, styleTemplatePath };
 };
 
+/**
+ * 获取组件名称
+ */
+const getComponentName = (options) => {
+  const { component: componentName } = options;
+  const componentNamePascalCase = startCase(camelCase(componentName)).replace(
+    ' ',
+    '',
+  );
+
+  return { componentName, componentNamePascalCase };
+};
+
 module.exports = {
   getTemplatePath,
+  getComponentName,
 };
