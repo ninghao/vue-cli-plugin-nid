@@ -1,5 +1,12 @@
-const { getGeneratedFilePath } = require('../app/app.service');
-const { getTemplatePath, getComponentName } = require('./component.service');
+const {
+  getGeneratedFilePath,
+  getParentFilePath,
+} = require('../app/app.service');
+const {
+  getTemplatePath,
+  getComponentName,
+  getComponentImportStatement,
+} = require('./component.service');
 
 const componentGenerator = (api, options) => {
   if (!options.component) return;
@@ -26,6 +33,13 @@ const componentGenerator = (api, options) => {
       componentNamePascalCase,
     },
   );
+
+  if (options.parent) {
+    const componentImportStatement = getComponentImportStatement(options);
+    const parentComponentPath = getParentFilePath('component', options);
+
+    api.injectImports(parentComponentPath, componentImportStatement);
+  }
 };
 
 module.exports = componentGenerator;
