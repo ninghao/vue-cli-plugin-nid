@@ -122,9 +122,18 @@ const getGeneratedFileImportPath = (fileType, options) => {
   return fileImportPath.join('/');
 };
 
+/**
+ * 获取项目文件内容
+ */
+const getProjectFileContent = (filePath, api) => {
+  const file = api.generator.files[filePath];
+  return file.split(/\r?\n/g);
+};
+
 module.exports = {
   getGeneratedFilePath,
   getParentFilePath,
   getParentName,
   getGeneratedFileImportPath,
+  getProjectFileContent,
 };
