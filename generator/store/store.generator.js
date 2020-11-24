@@ -2,9 +2,13 @@ const {
   getStoreTemplatePath,
   getStoreStateName,
   getStoreModuleName,
+  getStoreImportStatement,
 } = require('./store.service');
 
-const { getGeneratedFilePath } = require('../app/app.service');
+const {
+  getGeneratedFilePath,
+  getParentFilePath,
+} = require('../app/app.service');
 
 const storeGenerator = (api, options) => {
   if (!options.store) return;
@@ -29,6 +33,13 @@ const storeGenerator = (api, options) => {
       storeModuleName,
     },
   );
+
+  if (options.parent) {
+    const parentStorePath = getParentFilePath('store', options);
+    const storeImportStatement = getStoreImportStatement(options);
+
+    api.injectImports(parentStorePath, storeImportStatement);
+  }
 };
 
 module.exports = storeGenerator;

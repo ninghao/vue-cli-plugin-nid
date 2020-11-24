@@ -69,6 +69,9 @@ const getParentFilePath = (fileType, options) => {
     case 'component':
       fileExtention = '.vue';
       break;
+    case 'store':
+      fileExtention = '.store.ts';
+      break;
   }
 
   let parentFilePath = [];
@@ -105,6 +108,9 @@ const getGeneratedFileImportPath = (fileType, options) => {
   switch (fileType) {
     case 'component':
       fileFullName = fileName;
+      break;
+    case 'store':
+      fileFullName = `${fileName}.store`;
       break;
   }
 

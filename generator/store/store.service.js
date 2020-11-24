@@ -1,6 +1,8 @@
 const { camelCase, startCase } = require('lodash');
 const path = require('path');
 
+const { getGeneratedFileImportPath } = require('../app/app.service');
+
 /**
  * 获取 Store 模板文件路径
  */
@@ -24,8 +26,20 @@ const getStoreModuleName = (options) => {
   return camelCase(storeName) + 'StoreModule';
 };
 
+/**
+ * 获取 Store 导入声明
+ */
+const getStoreImportStatement = (options) => {
+  const storeStateName = getStoreStateName(options);
+  const storeModuleName = getStoreModuleName(options);
+  const storeImportPath = getGeneratedFileImportPath('store', options);
+
+  return `import { ${storeStateName}, ${storeModuleName} } from '${storeImportPath}';`;
+};
+
 module.exports = {
   getStoreTemplatePath,
   getStoreStateName,
   getStoreModuleName,
+  getStoreImportStatement,
 };
