@@ -91,4 +91,40 @@ const getParentName = (options) => {
   return last(options.parent.split('/'));
 };
 
-module.exports = { getGeneratedFilePath, getParentFilePath, getParentName };
+/**
+ * 获取导入路径
+ */
+const getGeneratedFileImportPath = (fileType, options) => {
+  const { [fileType]: fileName, path: filePath } = options;
+
+  let fileFullName;
+
+  switch (fileType) {
+    case 'component':
+      fileFullName = fileName;
+      break;
+  }
+
+  const fileNameArray = fileName.split('-');
+  const isMultiWordsFile = fileNameArray.length > 1;
+
+  let fileImportPath = [];
+
+  if (filePath) {
+    const filePathArray = filePath.split('/');
+    fileImportPath = ['@', ...filePathArray, fileFullName];
+  } else if (isMultiWordsFile) {
+    fileImportPath = ['@', ...fileNameArray, fileFullName];
+  } else {
+    fileImportPath = ['@', fileName, fileFullName];
+  }
+
+  return fileImportPath.join('/');
+};
+
+module.exports = {
+  getGeneratedFilePath,
+  getParentFilePath,
+  getParentName,
+  getGeneratedFileImportPath,
+};
