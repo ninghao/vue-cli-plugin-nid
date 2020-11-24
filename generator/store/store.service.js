@@ -16,7 +16,16 @@ const getStoreStateName = (options) => {
   return startCase(camelCase(storeName)).replace(/ /g, '') + 'StoreState';
 };
 
+/**
+ * 获取 Store 模块名
+ */
+const getStoreModuleName = (options) => {
+  const { store: storeName } = options;
+  return camelCase(storeName) + 'StoreModule';
+};
+
 module.exports = {
   getStoreTemplatePath,
   getStoreStateName,
+  getStoreModuleName,
 };
