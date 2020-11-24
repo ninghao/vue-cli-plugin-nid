@@ -130,10 +130,23 @@ const getProjectFileContent = (filePath, api) => {
   return file.split(/\r?\n/g);
 };
 
+/**
+ * 插入内容
+ */
+const insertFileContent = (options = {}) => {
+  const { fileContent, find, insert } = options;
+  const lineIndex = fileContent.findIndex((line) => line.match(RegExp(find)));
+
+  fileContent[lineIndex] += insert;
+
+  return fileContent;
+};
+
 module.exports = {
   getGeneratedFilePath,
   getParentFilePath,
   getParentName,
   getGeneratedFileImportPath,
   getProjectFileContent,
+  insertFileContent,
 };
