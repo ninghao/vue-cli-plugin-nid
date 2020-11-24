@@ -4,6 +4,8 @@ const {
   getStoreModuleName,
 } = require('./store.service');
 
+const { getGeneratedFilePath } = require('../app/app.service');
+
 const storeGenerator = (api, options) => {
   if (!options.store) return;
 
@@ -14,6 +16,19 @@ const storeGenerator = (api, options) => {
 
   // Store 模块名
   const storeModuleName = getStoreModuleName(options);
+
+  // Store 存放位置
+  const generatedStorePath = getGeneratedFilePath('store', options);
+
+  api.render(
+    {
+      [generatedStorePath]: storeTemplatePath,
+    },
+    {
+      storeStateName,
+      storeModuleName,
+    },
+  );
 };
 
 module.exports = storeGenerator;

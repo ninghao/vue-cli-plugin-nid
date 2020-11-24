@@ -31,6 +31,9 @@ const getGeneratedFilePath = (fileType, options) => {
     case 'style':
       fileFullName = path.join('styles', `${fileName}.css`);
       break;
+    case 'store':
+      fileFullName = `${fileName}.store.ts`;
+      break;
   }
 
   const fileNameArray = fileName.split('-');
