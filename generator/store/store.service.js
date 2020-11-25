@@ -67,6 +67,10 @@ const getStoreOptions = (options) => {
     resource = 'resource',
     // 资源类型
     resourceTypeName = pascalCase(resource),
+    // 动作参数
+    actionParam = 'options',
+    // 动作参数类型
+    actionParamType = pascalCase(action) + 'Options',
   } = options;
 
   // comments:Array:CommentListItem
@@ -88,6 +92,8 @@ const getStoreOptions = (options) => {
     resourceType,
     resourceTypeName,
     resourceItemType,
+    actionParam,
+    actionParamType,
   };
 };
 
