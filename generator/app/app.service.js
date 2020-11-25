@@ -1,5 +1,5 @@
 const path = require('path');
-const { last } = require('lodash');
+const { last, startCase, camelCase } = require('lodash');
 
 const getGeneratedFilePath = (fileType, options) => {
   /**
@@ -151,6 +151,13 @@ const insertFileContent = (options = {}) => {
   return fileContent;
 };
 
+/**
+ * PascalCase
+ */
+const pascalCase = (string) => {
+  return startCase(camelCase(string)).replace(/ /g, '');
+};
+
 module.exports = {
   getGeneratedFilePath,
   getParentFilePath,
@@ -158,4 +165,5 @@ module.exports = {
   getGeneratedFileImportPath,
   getProjectFileContent,
   insertFileContent,
+  pascalCase,
 };

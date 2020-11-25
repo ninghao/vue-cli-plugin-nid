@@ -1,6 +1,8 @@
 const path = require('path');
-const { camelCase, startCase } = require('lodash');
-const { getGeneratedFileImportPath } = require('../app/app.service');
+const {
+  getGeneratedFileImportPath,
+  pascalCase,
+} = require('../app/app.service');
 
 /**
  * 获取组件模板文件路径
@@ -17,10 +19,7 @@ const getTemplatePath = () => {
  */
 const getComponentName = (options) => {
   const { component: componentName } = options;
-  const componentNamePascalCase = startCase(camelCase(componentName)).replace(
-    / /g,
-    '',
-  );
+  const componentNamePascalCase = pascalCase(componentName);
 
   return { componentName, componentNamePascalCase };
 };
