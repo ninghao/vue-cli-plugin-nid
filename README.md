@@ -1,3 +1,111 @@
 # Vue CLI 插件
 
-用命令生成 Vue 组件，Store 模块等零部件。
+这是[宁皓网](https://ninghao.net)内部项目使用的一个 Vue CLI 插件，在使用了 TypeScript 的 Vue 项目里，可以用命令生成应用需要的组件与 Store 模块。
+
+## 安装
+
+```
+npm install vue-cli-plugin-nid --save-dev
+vue invoke vue-cli-plugin-nid
+```
+
+## 组件
+
+生成的组件可以使用 kebab-case 命名方式。
+
+```
+npm run generate:component -- comment-index
+```
+
+上面命令会生成一个组件，位置是： `comment/index/comment-index.vue` 。
+
+**指定位置**
+
+你可以用 `--path` 选项指定生成的组件的位置。
+
+```
+npm run generate:component -- comment-list --path comment/index/components
+```
+
+这样生成的组件位置会是： `comment/index/components/comment-list.vue` 。
+
+**使用 Vuex**
+
+如果你需要在组件里导入使用 Vuex 的帮手方法，可以使用 `--vuex` 设置需要的帮手方法，不指定具体的帮手方法，就会在生成的组件里导入使用全部的帮手方法。
+
+```
+npm run generate:component -- comment-list --path comment/index/components --vuex mapGetters,mapActions
+```
+
+或者：
+
+```
+npm run generate:component -- comment-list --path comment/index/components --vuex
+```
+
+**设置父组件**
+生成组件的时候你可以设置这个组件的父组件，这样命令会找到这个父组件，在它里面导入使用新生成的这个组件。
+
+```
+npm run generate:component -- comment-list --path comment/index/components --parent comment/index/comment-index
+```
+
+## Store
+
+生成一个 Store 模块：
+
+```
+npm run generate:store -- comment
+```
+
+上面命令会生成一个模块，位置是 `comment/comment.store.ts`。
+
+**设置父模块**
+
+用 `--parent` 选项设置一下生成的模块的父模块。用 `--module` 选项  可以设置在父模块那里注册的模块的名字。
+
+```
+npm run generate:store -- comment-create --parent comment/comment --module create
+```
+
+上面命令会生成一个 Store 模块，位置是 `comment/create/comment-create.vue`。在 `comment/comment.store.ts` 这个模块里会自动导入这个新生成的模块，在父模块的 `modules` 选项里注册时用的名字叫 `create`。
+
+**添加动作**
+
+在生成 Store 模块的时候，如果你想在模块里定义一个动作，可以使用 `--action` 选项。
+
+```
+npm run generate:store -- comment-index --action getComments
+```
+
+动作默认的参数名字叫 `options`，你可以使用 `--actionParam` 这个选项设置动作参数的名字。
+
+使用 `--method` 可以设置请求用的方法，用 `--api` 可以设置请求的接口地址。像这样：
+
+```
+npm run generate:store -- comment-create --action createComment --method post --api comments
+```
+
+**添加资源**
+
+如果 Store 里的动作请求回来一些资源，你可以用 `--resource` 选项设置一下资源的名字，这样就会在 Store 模块的 `state`，`getters`，`mutations` 里面添加对应的东西。
+
+```
+npm run generate:store -- comment-index --action getComments --resource comments
+```
+
+如果这个资源是一组数据，你可以设置这组数据的类型，还有数组项目的类型。
+
+```
+npm run generate:store -- comment-index --action getComments --resource comments:Array:CommentListItem
+```
+
+上面这个 `--resource` 选项的值分成了三个部分，第一部分是资源的名字，第二部分说明这个资源是 Array，第三部分是数据项目的类型。
+
+**动作预处理**
+
+如果动作比较复杂，我们可以分成预处理与后处理，就是在执行动作之前可以派发一个预处理动作。一般在请求完成以后可以派发一个后处理动作。在创建 Store 的时候，使用 `--pre` 与 `--post` 选项可以添加预处理与后处理动作。
+
+```
+npm run generate:store -- comment-index --action getComments --resource comments:Array:CommentListItem --pre --post
+```
