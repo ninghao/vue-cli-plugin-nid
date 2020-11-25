@@ -9,8 +9,16 @@ const {
 /**
  * 获取 Store 模板文件路径
  */
-const getStoreTemplatePath = () => {
-  return path.join('.', 'templates', 'store.ejs');
+const getStoreTemplatePath = (options) => {
+  const { action } = options;
+
+  let templateFile = 'store.ejs';
+
+  if (action) {
+    templateFile = 'store-action.ejs';
+  }
+
+  return path.join('.', 'templates', templateFile);
 };
 
 /**

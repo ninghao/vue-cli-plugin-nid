@@ -14,7 +14,7 @@ const {
 const storeGenerator = (api, options) => {
   if (!options.store) return;
 
-  const storeTemplatePath = getStoreTemplatePath();
+  const storeTemplatePath = getStoreTemplatePath(options);
 
   // Store 数据类型
   const storeStateName = getStoreStateName(options);
