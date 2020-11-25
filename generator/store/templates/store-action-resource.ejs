@@ -64,21 +64,35 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
    * 动作
    */
   actions: {
-    async <%= action %>({ commit }, <%= actionParam %>: <%= actionParamType %> = {}) {
+    async <%= action %>({ commit<% if (pre || post) { %>, dispatch<% } %> }, <%= actionParam %>: <%= actionParamType %> = {}) {<% if (pre) { %>
+      dispatch('<%= action %>PreProcess', <%= actionParam %>);
+      <% } else { %>
       commit('setLoading', true);
-
+      <% } %>
       try {
         const response = await apiHttpClient.<%= method %>(`<%= api %>`);
+        <% if (post) { %>
+        dispatch('<%= action %>PostProcess', response);
+        <% } else { %>
         commit('set<%= resourceNameCapitalize %>', response.data);
         commit('setLoading', false);
-
+        <% } %>
         return response;
       } catch (error) {
         commit('setLoading', false);
 
         throw error.response;
       }
-    },    
+    },<% if(pre) { %>
+
+    async <%= action %>PreProcess({ commit }, <%= actionParam %>: <%= actionParamType %> = {}) {
+      commit('setLoading', true);
+    },<% } %><% if (post) { %>
+
+    async <%= action %>PostProcess({ commit }, response) {
+      commit('setLoading', false);
+      commit('set<%= resourceNameCapitalize %>', response.data);
+    },<% } %>
   },
 
   /**
