@@ -40,9 +40,31 @@ const getStoreImportStatement = (options) => {
   return `import { ${storeStateName}, ${storeModuleName} } from '${storeImportPath}';`;
 };
 
+/**
+ * 获取 Store 选项
+ */
+const getStoreOptions = (options) => {
+  let {
+    // 动作名
+    action = 'action',
+    // 请求方法
+    method = 'get',
+    // 接口地址
+    api = 'resources',
+  } = options;
+
+  return {
+    ...options,
+    action,
+    method,
+    api,
+  };
+};
+
 module.exports = {
   getStoreTemplatePath,
   getStoreStateName,
   getStoreModuleName,
   getStoreImportStatement,
+  getStoreOptions,
 };

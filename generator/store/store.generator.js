@@ -3,6 +3,7 @@ const {
   getStoreStateName,
   getStoreModuleName,
   getStoreImportStatement,
+  getStoreOptions,
 } = require('./store.service');
 
 const {
@@ -24,6 +25,9 @@ const storeGenerator = (api, options) => {
   // Store 存放位置
   const generatedStorePath = getGeneratedFilePath('store', options);
 
+  // Store 选项
+  options = getStoreOptions(options);
+
   api.render(
     {
       [generatedStorePath]: storeTemplatePath,
@@ -31,6 +35,7 @@ const storeGenerator = (api, options) => {
     {
       storeStateName,
       storeModuleName,
+      ...options,
     },
   );
 
