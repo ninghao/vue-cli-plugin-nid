@@ -1,4 +1,4 @@
-const { camelCase } = require('lodash');
+const { camelCase, capitalize } = require('lodash');
 const path = require('path');
 
 const {
@@ -10,12 +10,16 @@ const {
  * 获取 Store 模板文件路径
  */
 const getStoreTemplatePath = (options) => {
-  const { action } = options;
+  const { action, resource } = options;
 
   let templateFile = 'store.ejs';
 
   if (action) {
     templateFile = 'store-action.ejs';
+  }
+
+  if (resource) {
+    templateFile = 'store-action-resource.ejs';
   }
 
   return path.join('.', 'templates', templateFile);
@@ -59,13 +63,31 @@ const getStoreOptions = (options) => {
     method = 'get',
     // 接口地址
     api = 'resources',
+    // 请求的资源
+    resource = 'resource',
+    // 资源类型
+    resourceTypeName = pascalCase(resource),
   } = options;
+
+  // comments:Array:CommentListItem
+  const resourceArray = resource.split(':');
+  const [resourceName, resourceType, resourceItemType] = resourceArray;
+
+  if (resourceArray.length > 1) {
+    resourceTypeName = pascalCase(resourceName);
+  }
 
   return {
     ...options,
     action,
     method,
     api,
+    resource,
+    resourceName,
+    resourceNameCapitalize: capitalize(resourceName),
+    resourceType,
+    resourceTypeName,
+    resourceItemType,
   };
 };
 
