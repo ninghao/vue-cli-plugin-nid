@@ -1,9 +1,9 @@
 import { Module } from 'vuex';
 import { RootState } from '@/app/app.store';
+import { apiHttpClient } from ' @/app/app.service';
 
-// action ~~~
 export interface <%= storeStateName %> {
-  name: string;
+  loading: boolean;
 }
 
 export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = {
@@ -16,28 +16,46 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
    * 数据
    */
   state: {
-    name: '<%= storeModuleName %>',
+    loading: false,
   } as <%= storeStateName %>,
 
   /**
    * 获取器
    */
   getters: {
-   
+    loading(state) {
+      return state.loading;
+    }
   },
 
   /**
    * 修改器
    */
   mutations: {
-
+    setLoading(state, data) {
+      state.loading = data;
+    }
   },
 
   /**
    * 动作
    */
   actions: {
+    async <%= action %>({ commit }) {
+      commit('setLoading', true);
 
+      try {
+        const response = await apiHttpClient.<%= method %>(`<%= api %>`);
+        commit('setResponseData', response.data);
+        commit('setLoading', false);
+
+        return response;
+      } catch (error) {
+        commit('setLoading', false);
+
+        throw error.response;
+      }
+    },    
   },
 
   /**
