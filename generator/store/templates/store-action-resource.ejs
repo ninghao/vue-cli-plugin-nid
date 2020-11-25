@@ -1,9 +1,19 @@
 import { Module } from 'vuex';
 import { RootState } from '@/app/app.store';
 import { apiHttpClient } from ' @/app/app.service';
+<% if (resourceType === 'Array') { %>
+export interface <%= resourceItemType %> {
+  data: null;
+}
+
+export type <%= resourceTypeName %> = Array<<%= resourceItemType %>>;<% } else { %>
+export interface <% resourceTypeName %> {
+  data: null;
+}<% } %>
 
 export interface <%= storeStateName %> {
   loading: boolean;
+  <%= resourceName %>: <%= resourceTypeName %> | null;
 }
 
 export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = {
@@ -17,6 +27,7 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
    */
   state: {
     loading: false,
+    <%= resourceName %>: null,
   } as <%= storeStateName %>,
 
   /**
@@ -25,6 +36,10 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
   getters: {
     loading(state) {
       return state.loading;
+    },
+
+    <%= resourceName %>(state) {
+      return state.<%= resourceName %>;
     }
   },
 
@@ -34,6 +49,10 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
   mutations: {
     setLoading(state, data) {
       state.loading = data;
+    },
+
+    set<%= resourceNameCapitalize %>(state, data) {
+      state.<%= resourceName %> = data;
     }
   },
 
@@ -46,7 +65,7 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
 
       try {
         const response = await apiHttpClient.<%= method %>(`<%= api %>`);
-        commit('setResponseData', response.data);
+        commit('set<%= resourceNameCapitalize %>', response.data);
         commit('setLoading', false);
 
         return response;

@@ -25,7 +25,7 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
   getters: {
     loading(state) {
       return state.loading;
-    }
+    },
   },
 
   /**
@@ -34,7 +34,7 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
   mutations: {
     setLoading(state, data) {
       state.loading = data;
-    }
+    },
   },
 
   /**
@@ -46,7 +46,6 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
 
       try {
         const response = await apiHttpClient.<%= method %>(`<%= api %>`);
-        commit('setResponseData', response.data);
         commit('setLoading', false);
 
         return response;
