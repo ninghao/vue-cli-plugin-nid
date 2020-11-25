@@ -34,8 +34,30 @@ const getComponentImportStatement = (options) => {
   return `import ${componentNamePascalCase} from '${componentImportPath}';`;
 };
 
+/**
+ * 获取组件选项
+ */
+const getComponentOptions = (options) => {
+  let { vuex = '' } = options;
+
+  if (vuex === true) {
+    vuex = 'mapGetters,mapMutations,mapActions';
+  }
+
+  if (typeof vuex === 'string') {
+    vuex = vuex.split(',').join(', ');
+  }
+
+  options.mapGetters = vuex.includes('mapGetters');
+  options.mapMutations = vuex.includes('mapMutations');
+  options.mapActions = vuex.includes('mapActions');
+
+  return { ...options, vuex };
+};
+
 module.exports = {
   getTemplatePath,
   getComponentName,
   getComponentImportStatement,
+  getComponentOptions,
 };

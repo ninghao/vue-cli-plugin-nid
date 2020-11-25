@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue';<% if (vuex) { %>
+import { <%= vuex %> } from 'vuex';<% } %>
 
 export default defineComponent({
   name: '<%= componentNamePascalCase %>',
@@ -25,7 +26,9 @@ export default defineComponent({
   /**
    * 计算属性
    */
-  computed: {},
+  computed: {<% if (mapGetters) { %>
+    ...mapGetters({}),<% } %>
+  },
 
   /**
    * 已创建
@@ -37,7 +40,10 @@ export default defineComponent({
   /**
    * 组件方法
    */
-  methods: {},
+  methods: {<% if (mapMutations) { %>
+    ...mapMutations({}),<% } %><% if (mapActions) { %>
+    ...mapActions({}),<% } %>
+  },
 
   /**
    * 使用组件
