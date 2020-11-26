@@ -10,6 +10,9 @@ const {
   getComponentOptions,
 } = require('./component.service');
 
+/**
+ * 组件生成器
+ */
 const componentGenerator = (api, options) => {
   // 如果命令里没提供 component 选项，直接返回，啥也不做
   if (!options.component) return;
