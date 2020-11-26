@@ -1,4 +1,8 @@
+/**
+ * 应用生成器
+ */
 const appGenerator = (api, options) => {
+  // 在项目的 package.json 里添加命令
   api.extendPackage({
     scripts: {
       'generate:component': 'vue invoke vue-cli-plugin-nid --component',
@@ -9,4 +13,7 @@ const appGenerator = (api, options) => {
   });
 };
 
+/**
+ * 导出
+ */
 module.exports = appGenerator;

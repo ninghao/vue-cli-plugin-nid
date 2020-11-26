@@ -1,4 +1,5 @@
 const path = require('path');
+
 const {
   getGeneratedFileImportPath,
   pascalCase,
@@ -55,6 +56,9 @@ const getComponentOptions = (options) => {
   return { ...options, vuex };
 };
 
+/**
+ * 导出
+ */
 module.exports = {
   getTemplatePath,
   getComponentName,

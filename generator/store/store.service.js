@@ -103,6 +103,9 @@ const getStoreOptions = (options) => {
   };
 };
 
+/**
+ * 导出
+ */
 module.exports = {
   getStoreTemplatePath,
   getStoreStateName,

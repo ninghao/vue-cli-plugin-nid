@@ -1,6 +1,9 @@
 const path = require('path');
 const { last, startCase, camelCase } = require('lodash');
 
+/**
+ * 获取生成文件路径
+ */
 const getGeneratedFilePath = (fileType, options) => {
   /**
    * 1. --component comment
@@ -12,7 +15,6 @@ const getGeneratedFilePath = (fileType, options) => {
    * 3. --component comment-list --path comment/index/components
    *    -> src/comment/index/components/comment-list.vue
    */
-
   let typeOption = fileType;
 
   if (fileType === 'style') {
@@ -158,6 +160,9 @@ const pascalCase = (string) => {
   return startCase(camelCase(string)).replace(/ /g, '');
 };
 
+/**
+ * 导出
+ */
 module.exports = {
   getGeneratedFilePath,
   getParentFilePath,

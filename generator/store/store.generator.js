@@ -14,6 +14,7 @@ const {
 const storeGenerator = (api, options) => {
   if (!options.store) return;
 
+  // Store 模板文件路径
   const storeTemplatePath = getStoreTemplatePath(options);
 
   // Store 数据类型
@@ -28,6 +29,7 @@ const storeGenerator = (api, options) => {
   // Store 选项
   options = getStoreOptions(options);
 
+  // 在项目里生成 Store 模块文件
   api.render(
     {
       [generatedStorePath]: storeTemplatePath,
@@ -39,6 +41,7 @@ const storeGenerator = (api, options) => {
     },
   );
 
+  // 在父 Store 模块里导入新生成的 Store 模块
   if (options.parent) {
     const parentStorePath = getParentFilePath('store', options);
     const storeImportStatement = getStoreImportStatement(options);
@@ -47,4 +50,7 @@ const storeGenerator = (api, options) => {
   }
 };
 
+/**
+ * 导出
+ */
 module.exports = storeGenerator;
