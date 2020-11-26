@@ -6,8 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/ninghao/vue-cli-plugin-nid"
+  },
+  "homepage": "https://ninghao.net/",
   "keywords": [],
-  "author": "",
+  "author": "wanghao",
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.20"
