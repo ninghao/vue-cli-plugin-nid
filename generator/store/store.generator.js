@@ -11,6 +11,9 @@ const {
   getParentFilePath,
 } = require('../app/app.service');
 
+/**
+ * Store 生成器
+ */
 const storeGenerator = (api, options) => {
   if (!options.store) return;
 
