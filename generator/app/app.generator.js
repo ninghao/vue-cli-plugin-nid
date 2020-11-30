@@ -7,8 +7,10 @@ const appGenerator = (api, options) => {
     scripts: {
       'generate:component': 'vue invoke vue-cli-plugin-nid --component',
       'generate:store': 'vue invoke vue-cli-plugin-nid --store',
+      'import:component': 'vue invoke vue-cli-plugin-nid --importComponent',
       gc: 'vue invoke vue-cli-plugin-nid --component',
       gs: 'vue invoke vue-cli-plugin-nid --store',
+      ic: 'vue invoke vue-cli-plugin-nid --importComponent',
     },
   });
 };

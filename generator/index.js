@@ -3,6 +3,8 @@ const componentGenerator = require('./component/component.generator');
 const componentGeneratorHook = require('./component/component.generator.hook');
 const storeGenerator = require('./store/store.generator');
 const storeGeneratorHook = require('./store/store.generator.hook');
+const importGenerator = require('./import/import.generator');
+const importGeneratorHook = require('./import/import.generator.hook');
 
 /**
  * 生成器
@@ -16,6 +18,9 @@ module.exports = (api, options) => {
 
   // Store 生成器
   storeGenerator(api, options);
+
+  // 导入生成器
+  importGenerator(api, options);
 };
 
 /**
@@ -27,4 +32,7 @@ module.exports.hooks = (api, options) => {
 
   // Store 生成器钩子
   storeGeneratorHook(api, options);
+
+  // 导入生成器钩子
+  importGeneratorHook(api, options);
 };
