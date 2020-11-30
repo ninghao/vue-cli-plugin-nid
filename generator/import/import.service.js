@@ -26,7 +26,7 @@ const getComponentImportStatement = (importComponentPath) => {
       return { name: componentName, path: componentPath };
     })
     .map((item) => {
-      return `import ${item.name} from '${item.path}'`;
+      return `import ${item.name} from '${item.path}';`;
     });
 };
 
