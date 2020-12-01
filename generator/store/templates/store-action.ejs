@@ -6,6 +6,10 @@ export interface <%= storeStateName %> {
   loading: boolean;
 }
 
+export interface <%= actionParamType %> {
+  data?: null;
+}
+
 export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = {
   /**
    * 命名空间
@@ -41,7 +45,7 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
    * 动作
    */
   actions: {
-    async <%= action %>({ commit }) {
+    async <%= action %>({ commit }, <%= actionParam %>: <%= actionParamType %> = {}) {
       commit('setLoading', true);
 
       try {
