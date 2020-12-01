@@ -98,15 +98,9 @@ const vuexImportGeneratorHook = (api, options) => {
     api,
   );
 
-  // 确定使用的帮手
-  const useMapState = importVuexHelpers.includes('mapState');
-  const useMapGetters = importVuexHelpers.includes('mapGetters');
-  const useMapMutations = importVuexHelpers.includes('mapMutations');
-  const useMapActions = importVuexHelpers.includes('mapActions');
-
   // 插入内容
   importVuexHelpers.map((helper) => {
-    if (useMapState || useMapGetters) {
+    if (helper === 'mapState' || helper === 'mapGetters') {
       targetComponentFileContent = insertFileContent({
         fileContent: targetComponentFileContent,
         find: `computed: {`,
@@ -114,7 +108,7 @@ const vuexImportGeneratorHook = (api, options) => {
       });
     }
 
-    if (useMapMutations || useMapActions) {
+    if (helper === 'mapMutations' || helper === 'mapActions') {
       targetComponentFileContent = insertFileContent({
         fileContent: targetComponentFileContent,
         find: `methods: {`,
