@@ -85,7 +85,7 @@ const getParentFilePath = (fileType, options) => {
     parentArray.pop();
     parentFilePath = ['src', ...parentArray, parentFileName];
   } else {
-    parentFilePath = ['src', parent, parentFileName];
+    parentFilePath = ['src', ...parent.split('-'), parentFileName];
   }
 
   return path.join(...parentFilePath);
