@@ -42,9 +42,9 @@ const getImportComponentPath = (api, options) => {
 };
 
 /**
- * 获取 Vuex 导入声明
+ * 获取导入 Vuex 帮手方法
  */
-const getVuexImportStatement = (api, options) => {
+const getVuexImportHelpers = (api, options) => {
   const { importVuex } = options;
 
   // Vuex 帮手方法
@@ -67,25 +67,30 @@ const getVuexImportStatement = (api, options) => {
     },
   ];
 
-  const importVuexHelpers = importVuex
-    .split(',')
-    .map((item) => {
-      let vuexHelper = '';
+  const importVuexHelpers = importVuex.split(',').map((item) => {
+    let vuexHelper = '';
 
-      const isFullName = vuexHelpers.some((helper) => helper.name === item);
+    const isFullName = vuexHelpers.some((helper) => helper.name === item);
 
-      if (isFullName) {
-        // 直接返回全名帮手方法
-        vuexHelper = item;
-      } else {
-        // 返回缩写对应的全名帮手方法
-        vuexHelper = vuexHelpers.filter((helper) => helper.abbr === item)[0]
-          .name;
-      }
+    if (isFullName) {
+      // 直接返回全名帮手方法
+      vuexHelper = item;
+    } else {
+      // 返回缩写对应的全名帮手方法
+      vuexHelper = vuexHelpers.filter((helper) => helper.abbr === item)[0].name;
+    }
 
-      return vuexHelper;
-    })
-    .join(', ');
+    return vuexHelper;
+  });
+
+  return importVuexHelpers;
+};
+
+/**
+ * 获取 Vuex 导入声明
+ */
+const getVuexImportStatement = (api, options) => {
+  const importVuexHelpers = getVuexImportHelpers(api, options).join(', ');
 
   return `import { ${importVuexHelpers} } from 'vuex';`;
 };
@@ -98,4 +103,5 @@ module.exports = {
   getComponentImportStatement,
   getImportComponentPath,
   getVuexImportStatement,
+  getVuexImportHelpers,
 };
