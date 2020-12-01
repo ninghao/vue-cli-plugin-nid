@@ -100,21 +100,22 @@ const vuexImportGeneratorHook = (api, options) => {
 
   // 插入内容
   importVuexHelpers.map((helper) => {
+    let find = '';
+    let insert = `${EOL}    ...${helper}({}),`;
+
     if (helper === 'mapState' || helper === 'mapGetters') {
-      targetComponentFileContent = insertFileContent({
-        fileContent: targetComponentFileContent,
-        find: `computed: {`,
-        insert: `${EOL}    ...${helper}({}),`,
-      });
+      find = `computed: {`;
     }
 
     if (helper === 'mapMutations' || helper === 'mapActions') {
-      targetComponentFileContent = insertFileContent({
-        fileContent: targetComponentFileContent,
-        find: `methods: {`,
-        insert: `${EOL}    ...${helper}({}),`,
-      });
+      find = `methods: {`;
     }
+
+    targetComponentFileContent = insertFileContent({
+      fileContent: targetComponentFileContent,
+      find,
+      insert,
+    });
   });
 
   // 写入目标组件文件
