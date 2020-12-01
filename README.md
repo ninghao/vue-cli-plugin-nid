@@ -44,6 +44,7 @@ npm run generate:component -- comment-list --path comment/index/components --vue
 ```
 
 **设置父组件**
+
 生成组件的时候你可以设置这个组件的父组件，这样命令会找到这个父组件，在它里面导入使用新生成的这个组件。
 
 ```
@@ -108,4 +109,25 @@ npm run generate:store -- comment-index --action getComments --resource comments
 
 ```
 npm run generate:store -- comment-index --action getComments --resource comments:Array:CommentListItem --pre --post
+```
+
+## 导入
+你可以使用导入生成器，在项目现有的组件里导入使用其它的组件，也可以导入使用 Vuex 的帮手方法。
+
+**导入组件**
+
+使用 `import:component` 或者 `ic` 命令，可以在组件里导入使用其它的组件，如果需要导入多个组件，可以中间用逗号分隔开。用 `--to` 选项设置目标组件。
+
+```
+npm run import:component -- user-avatar,user-name --to comment-create
+```
+
+上面这个命令可以在 `comment-create` 这个组件里导入使用 `UserAvatar` 与 `UserName` 组件。命令会自动查找项目里的组件，不需要设置组件的路径。
+
+**导入 Vuex**
+
+在现在组件里导入使用 Vuex 的帮手方法，可以执行 `import:vuex` 或 `iv` 命令。用 `--to` 选项设置目标组件。帮手方法的名字可以使用简写，比如 `ms`, `mg`, `ma`, `mm` 。
+
+```
+npm run import:vuex -- mapGetters,mapActions --to comment-create
 ```
