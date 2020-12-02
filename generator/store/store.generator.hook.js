@@ -1,24 +1,35 @@
 const fs = require('fs');
 const { EOL } = require('os');
+const { capitalize } = require('lodash');
 
 const {
   getParentFilePath,
   getProjectFileContent,
   insertFileContent,
+  pascalCase,
 } = require('../app/app.service');
 
-const { getStoreStateName, getStoreModuleName } = require('./store.service');
+const {
+  getStoreStateName,
+  getStoreModuleName,
+  getTargetStorePath,
+} = require('./store.service');
 
 /**
  * Store 生成器钩子
  */
 const storeGeneratorHook = (api, options) => {
   api.afterInvoke(() => {
-    const { store, parent, module } = options;
+    const { store, parent, module, storeState, to } = options;
 
     // Store 模块生成器钩子
     if (store && parent && module) {
       storeModuleGeneratorHook(api, options);
+    }
+
+    // Store State 生成器钩子
+    if (storeState && to) {
+      storeStateGeneratorHook(api, options);
     }
   });
 };
@@ -66,6 +77,83 @@ const storeModuleGeneratorHook = (api, options) => {
 
   // 写入父 Store 模块文件
   fs.writeFileSync(api.resolve(parentStorePath), parentFileContent.join(EOL), {
+    encoding: 'utf-8',
+  });
+};
+
+/**
+ * Store State 生成器钩子
+ */
+const storeStateGeneratorHook = (api, options) => {
+  const { storeState, to: storeModule } = options;
+
+  // State 名字与类型
+  let stateName, stateType, stateDefault;
+
+  const storeStateArray = storeState.split(':');
+
+  if (storeStateArray.length > 1) {
+    stateName = storeStateArray[0];
+    stateType = storeStateArray[1];
+    stateDefault = storeStateArray[2];
+  } else {
+    stateName = storeState;
+    stateType = 'string';
+    stateDefault = '';
+  }
+
+  // Store 模块文件
+  const storeModulePath = getTargetStorePath(api, options);
+  let storeModuleContent = getProjectFileContent(storeModulePath, api);
+
+  // Store 数据类型
+  const storeStateType = pascalCase(storeModule) + 'StoreState';
+  const findStoreStateType = `export interface ${storeStateType}`;
+
+  // 插入 Store State 类型
+  storeModuleContent = insertFileContent({
+    fileContent: storeModuleContent,
+    find: findStoreStateType,
+    insert: `${EOL}  ${stateName}: ${stateType},`,
+  });
+
+  const findStoreState = `state: {`;
+
+  // 插入 Store State
+  storeModuleContent = insertFileContent({
+    fileContent: storeModuleContent,
+    find: findStoreState,
+    insert: `${EOL}    ${stateName}: ${stateDefault},`,
+  });
+
+  const findStoreGetters = `getters: {`;
+
+  // State 获取器
+  const stateGetter = `${EOL}    ${stateName}(state) {${EOL}      return state.${stateName};${EOL}    },`;
+
+  // 插入 Store Getters
+  storeModuleContent = insertFileContent({
+    fileContent: storeModuleContent,
+    find: findStoreGetters,
+    insert: stateGetter,
+  });
+
+  const findStoreMutations = `mutations: {`;
+
+  // State 修改器
+  const stateMutation = `${EOL}    set${capitalize(
+    stateName,
+  )}(state, data) {${EOL}      state.${stateName} = data;${EOL}    },`;
+
+  // 插入 Store Mutations
+  storeModuleContent = insertFileContent({
+    fileContent: storeModuleContent,
+    find: findStoreMutations,
+    insert: stateMutation,
+  });
+
+  // 写入 Store 模块文件
+  fs.writeFileSync(api.resolve(storeModulePath), storeModuleContent.join(EOL), {
     encoding: 'utf-8',
   });
 };

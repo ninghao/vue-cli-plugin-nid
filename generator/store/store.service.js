@@ -104,6 +104,15 @@ const getStoreOptions = (options) => {
 };
 
 /**
+ * 获取目标 Store 模块路径
+ */
+const getTargetStorePath = (api, options) => {
+  return Object.keys(api.generator.files).filter((file) =>
+    file.includes(`${options.to}.store.ts`),
+  )[0];
+};
+
+/**
  * 导出
  */
 module.exports = {
@@ -112,4 +121,5 @@ module.exports = {
   getStoreModuleName,
   getStoreImportStatement,
   getStoreOptions,
+  getTargetStorePath,
 };
