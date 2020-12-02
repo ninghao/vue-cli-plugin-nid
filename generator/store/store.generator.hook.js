@@ -106,50 +106,38 @@ const storeStateGeneratorHook = (api, options) => {
   const storeModulePath = getTargetStorePath(api, options);
   let storeModuleContent = getProjectFileContent(storeModulePath, api);
 
-  // Store 数据类型
-  const storeStateType = pascalCase(storeModule) + 'StoreState';
-  const findStoreStateType = `export interface ${storeStateType}`;
+  // 查找插入
+  const findInsert = [
+    {
+      // Type
+      find: `export interface ${pascalCase(storeModule) + 'StoreState'}`,
+      insert: `${EOL}  ${stateName}: ${stateType},`,
+    },
+    {
+      // State
+      find: `state: {`,
+      insert: `${EOL}    ${stateName}: ${stateDefault},`,
+    },
+    {
+      // Getters
+      find: `getters: {`,
+      insert: `${EOL}    ${stateName}(state) {${EOL}      return state.${stateName};${EOL}    },`,
+    },
+    {
+      // Mutations
+      find: `mutations: {`,
+      insert: `${EOL}    set${capitalize(
+        stateName,
+      )}(state, data) {${EOL}      state.${stateName} = data;${EOL}    },`,
+    },
+  ];
 
-  // 插入 Store State 类型
-  storeModuleContent = insertFileContent({
-    fileContent: storeModuleContent,
-    find: findStoreStateType,
-    insert: `${EOL}  ${stateName}: ${stateType},`,
-  });
-
-  const findStoreState = `state: {`;
-
-  // 插入 Store State
-  storeModuleContent = insertFileContent({
-    fileContent: storeModuleContent,
-    find: findStoreState,
-    insert: `${EOL}    ${stateName}: ${stateDefault},`,
-  });
-
-  const findStoreGetters = `getters: {`;
-
-  // State 获取器
-  const stateGetter = `${EOL}    ${stateName}(state) {${EOL}      return state.${stateName};${EOL}    },`;
-
-  // 插入 Store Getters
-  storeModuleContent = insertFileContent({
-    fileContent: storeModuleContent,
-    find: findStoreGetters,
-    insert: stateGetter,
-  });
-
-  const findStoreMutations = `mutations: {`;
-
-  // State 修改器
-  const stateMutation = `${EOL}    set${capitalize(
-    stateName,
-  )}(state, data) {${EOL}      state.${stateName} = data;${EOL}    },`;
-
-  // 插入 Store Mutations
-  storeModuleContent = insertFileContent({
-    fileContent: storeModuleContent,
-    find: findStoreMutations,
-    insert: stateMutation,
+  findInsert.map((item) => {
+    storeModuleContent = insertFileContent({
+      fileContent: storeModuleContent,
+      find: item.find,
+      insert: item.insert,
+    });
   });
 
   // 写入 Store 模块文件
