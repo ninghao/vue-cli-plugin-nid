@@ -1,6 +1,5 @@
 const fs = require('fs');
 const { EOL } = require('os');
-const { capitalize } = require('lodash');
 
 const {
   getParentFilePath,
@@ -99,7 +98,7 @@ const storeStateGeneratorHook = (api, options) => {
   } else {
     stateName = storeState;
     stateType = 'string';
-    stateDefault = '';
+    stateDefault = `''`;
   }
 
   // Store 模块文件
@@ -121,14 +120,14 @@ const storeStateGeneratorHook = (api, options) => {
     {
       // Getters
       find: `getters: {`,
-      insert: `${EOL}    ${stateName}(state) {${EOL}      return state.${stateName};${EOL}    },`,
+      insert: `${EOL}    ${stateName}(state) {${EOL}      return state.${stateName};${EOL}    },${EOL}`,
     },
     {
       // Mutations
       find: `mutations: {`,
-      insert: `${EOL}    set${capitalize(
+      insert: `${EOL}    set${pascalCase(
         stateName,
-      )}(state, data) {${EOL}      state.${stateName} = data;${EOL}    },`,
+      )}(state, data) {${EOL}      state.${stateName} = data;${EOL}    },${EOL}`,
     },
   ];
 
