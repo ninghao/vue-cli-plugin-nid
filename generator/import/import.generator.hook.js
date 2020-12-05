@@ -54,17 +54,24 @@ const componentImportGeneratorHook = (api, options) => {
       .map((item) => pascalCase(item))
       .join(`,${EOL}    `) + ',';
 
-  targetComponentFileContent = findReplaceFileContent({
+  const findRegisterComponent = findFileContent({
     fileContent: targetComponentFileContent,
-    find: `components: {}`,
-    replace: [`  components: {`, `  },`],
+    find: `${registerComponent}`,
   });
 
-  targetComponentFileContent = insertFileContent({
-    fileContent: targetComponentFileContent,
-    find: 'components: {',
-    insert: `    ${registerComponent}`,
-  });
+  if (!findRegisterComponent) {
+    targetComponentFileContent = findReplaceFileContent({
+      fileContent: targetComponentFileContent,
+      find: `components: {}`,
+      replace: [`  components: {`, `  },`],
+    });
+
+    targetComponentFileContent = insertFileContent({
+      fileContent: targetComponentFileContent,
+      find: 'components: {',
+      insert: `    ${registerComponent}`,
+    });
+  }
 
   // 使用组件
   const useComponent = importComponent
@@ -72,11 +79,18 @@ const componentImportGeneratorHook = (api, options) => {
     .map((item) => `<${pascalCase(item)} />`)
     .join(`${EOL}    `);
 
-  targetComponentFileContent = insertFileContent({
+  const findUseComponent = findFileContent({
     fileContent: targetComponentFileContent,
-    find: `<div class="${targetComponent}">`,
-    insert: `    ${useComponent}`,
+    find: `${useComponent}`,
   });
+
+  if (!findUseComponent) {
+    targetComponentFileContent = insertFileContent({
+      fileContent: targetComponentFileContent,
+      find: `<div class="${targetComponent}">`,
+      insert: `    ${useComponent}`,
+    });
+  }
 
   // 写入目标组件文件
   fs.writeFileSync(
@@ -111,6 +125,14 @@ const vuexImportGeneratorHook = (api, options) => {
   importVuexHelpers.map((helper) => {
     let find = '';
     let insert = `    ...${helper}({}),`;
+
+    const findResult = findFileContent({
+      fileContent: targetComponentFileContent,
+      find: `...${helper}`,
+    });
+
+    // 如果找到要插入的内容，就什么也不做
+    if (findResult) return;
 
     if (helper === 'mapState' || helper === 'mapGetters') {
       // 查找替换
