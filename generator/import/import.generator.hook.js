@@ -54,10 +54,16 @@ const componentImportGeneratorHook = (api, options) => {
       .map((item) => pascalCase(item))
       .join(`,${EOL}    `) + ',';
 
+  targetComponentFileContent = findReplaceFileContent({
+    fileContent: targetComponentFileContent,
+    find: `components: {}`,
+    replace: [`  components: {`, `  },`],
+  });
+
   targetComponentFileContent = insertFileContent({
     fileContent: targetComponentFileContent,
     find: 'components: {',
-    insert: `${EOL}    ${registerComponent}`,
+    insert: `    ${registerComponent}`,
   });
 
   // 使用组件
@@ -69,7 +75,7 @@ const componentImportGeneratorHook = (api, options) => {
   targetComponentFileContent = insertFileContent({
     fileContent: targetComponentFileContent,
     find: `<div class="${targetComponent}">`,
-    insert: `${EOL}    ${useComponent}`,
+    insert: `    ${useComponent}`,
   });
 
   // 写入目标组件文件
