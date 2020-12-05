@@ -128,7 +128,7 @@ const vuexImportGeneratorHook = (api, options) => {
 
     const findResult = findFileContent({
       fileContent: targetComponentFileContent,
-      find: `...${helper}`,
+      find: `\\.\\.\\.${helper}`,
     });
 
     // 如果找到要插入的内容，就什么也不做
