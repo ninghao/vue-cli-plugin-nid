@@ -10,6 +10,9 @@ const {
 const {
   getProjectFileContent,
   insertFileContent,
+  findFileContent,
+  replaceFileContent,
+  findReplaceFileContent,
 } = require('../app/app.service');
 
 /**
@@ -101,16 +104,31 @@ const vuexImportGeneratorHook = (api, options) => {
   // 插入内容
   importVuexHelpers.map((helper) => {
     let find = '';
-    let insert = `${EOL}    ...${helper}({}),`;
+    let insert = `    ...${helper}({}),`;
 
     if (helper === 'mapState' || helper === 'mapGetters') {
+      // 查找替换
+      targetComponentFileContent = findReplaceFileContent({
+        fileContent: targetComponentFileContent,
+        find: `computed: {}`,
+        replace: [`  computed: {`, `  },`],
+      });
+
       find = `computed: {`;
     }
 
     if (helper === 'mapMutations' || helper === 'mapActions') {
+      // 查找替换
+      targetComponentFileContent = findReplaceFileContent({
+        fileContent: targetComponentFileContent,
+        find: `methods: {}`,
+        replace: [`  methods: {`, `  },`],
+      });
+
       find = `methods: {`;
     }
 
+    // 插入内容
     targetComponentFileContent = insertFileContent({
       fileContent: targetComponentFileContent,
       find,

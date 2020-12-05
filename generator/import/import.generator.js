@@ -38,7 +38,7 @@ const importGenerator = (api, options) => {
     const vuexImportStatement = getVuexImportStatement(api, options);
 
     // 插入导入声明
-    api.injectImports(targetComponentPath, vuexImportStatement);
+    // api.injectImports(targetComponentPath, vuexImportStatement);
   }
 };
 

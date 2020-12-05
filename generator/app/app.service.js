@@ -148,9 +148,52 @@ const insertFileContent = (options = {}) => {
   const { fileContent, find, insert } = options;
   const lineIndex = fileContent.findIndex((line) => line.match(RegExp(find)));
 
-  fileContent[lineIndex] += insert;
+  if (Array.isArray(insert)) {
+    fileContent.splice(lineIndex + 1, 0, ...insert);
+  } else {
+    fileContent.splice(lineIndex + 1, 0, insert);
+  }
 
   return fileContent;
+};
+
+/**
+ * 替换内容
+ */
+const replaceFileContent = (options = {}) => {
+  const { fileContent, find, replace } = options;
+  const lineIndex = fileContent.findIndex((line) => line.match(RegExp(find)));
+
+  if (Array.isArray(replace)) {
+    fileContent.splice(lineIndex, 1, ...replace);
+  } else {
+    fileContent.splice(lineIndex, 1, replace);
+  }
+
+  return fileContent;
+};
+
+/**
+ * 查找替换
+ */
+const findReplaceFileContent = (options = {}) => {
+  let { fileContent, find, replace } = options;
+
+  const findResult = findFileContent({ fileContent, find });
+
+  if (findResult) {
+    fileContent = replaceFileContent({ fileContent, find, replace });
+  }
+
+  return fileContent;
+};
+
+/**
+ * 查找内容
+ */
+const findFileContent = (options = {}) => {
+  const { fileContent, find } = options;
+  return fileContent.some((line) => line.match(RegExp(find)));
 };
 
 /**
@@ -171,4 +214,7 @@ module.exports = {
   getProjectFileContent,
   insertFileContent,
   pascalCase,
+  findFileContent,
+  replaceFileContent,
+  findReplaceFileContent,
 };
