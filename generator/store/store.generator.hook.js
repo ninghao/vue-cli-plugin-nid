@@ -64,14 +64,14 @@ const storeModuleGeneratorHook = (api, options) => {
   parentFileContent = insertFileContent({
     fileContent: parentFileContent,
     find: findParentStoreState,
-    insert: `${EOL}  ${moduleName}: ${storeStateName},`,
+    insert: `  ${moduleName}: ${storeStateName},`,
   });
 
   // 在父 Store 模块里注册模块
   parentFileContent = insertFileContent({
     fileContent: parentFileContent,
     find: 'modules: {',
-    insert: `${EOL}    ${moduleName}: ${storeModuleName},`,
+    insert: `    ${moduleName}: ${storeModuleName},`,
   });
 
   // 写入父 Store 模块文件
@@ -110,22 +110,22 @@ const storeStateGeneratorHook = (api, options) => {
     {
       // Type
       find: `export interface ${pascalCase(storeModule) + 'StoreState'}`,
-      insert: `${EOL}  ${stateName}: ${stateType},`,
+      insert: `  ${stateName}: ${stateType},`,
     },
     {
       // State
       find: `state: {`,
-      insert: `${EOL}    ${stateName}: ${stateDefault},`,
+      insert: `    ${stateName}: ${stateDefault},`,
     },
     {
       // Getters
       find: `getters: {`,
-      insert: `${EOL}    ${stateName}(state) {${EOL}      return state.${stateName};${EOL}    },${EOL}`,
+      insert: `    ${stateName}(state) {${EOL}      return state.${stateName};${EOL}    },${EOL}`,
     },
     {
       // Mutations
       find: `mutations: {`,
-      insert: `${EOL}    set${pascalCase(
+      insert: `    set${pascalCase(
         stateName,
       )}(state, data) {${EOL}      state.${stateName} = data;${EOL}    },${EOL}`,
     },
