@@ -1,5 +1,7 @@
 const path = require('path');
 
+const { last } = require('lodash');
+
 const {
   getGeneratedFileImportPath,
   pascalCase,
@@ -19,7 +21,15 @@ const getTemplatePath = () => {
  * 获取组件名称
  */
 const getComponentName = (options) => {
-  const { component: componentName } = options;
+  let { component: componentName } = options;
+
+  const filePathNameArray = componentName.split('/');
+  const isFileWithPath = filePathNameArray.length > 1;
+
+  if (isFileWithPath) {
+    componentName = last(filePathNameArray);
+  }
+
   const componentNamePascalCase = pascalCase(componentName);
 
   return { componentName, componentNamePascalCase };

@@ -14,6 +14,9 @@ const getGeneratedFilePath = (fileType, options) => {
    *
    * 3. --component comment-list --path comment/index/components
    *    -> src/comment/index/components/comment-list.vue
+   *
+   * 4. --component comment/index/components/comment-list
+   *    -> src/comment/index/components/comment-list.vue
    */
   let typeOption = fileType;
 
@@ -21,7 +24,16 @@ const getGeneratedFilePath = (fileType, options) => {
     typeOption = 'component';
   }
 
-  const { [typeOption]: fileName, path: filePath } = options;
+  let { [typeOption]: fileName, path: filePath } = options;
+
+  const fileNameArray = fileName.split('-');
+  const filePathNameArray = fileName.split('/');
+  const isFileWithPath = filePathNameArray.length > 1;
+  const isMultiWordsFile = fileNameArray.length > 1 && !isFileWithPath;
+
+  if (isFileWithPath) {
+    fileName = last(filePathNameArray);
+  }
 
   // 带后缀的文件名
   let fileFullName;
@@ -38,13 +50,14 @@ const getGeneratedFilePath = (fileType, options) => {
       break;
   }
 
-  const fileNameArray = fileName.split('-');
-  const isMultiWordsFile = fileNameArray.length > 1;
-
   // 文件存放位置
   let fileFullPath = [];
 
-  if (filePath) {
+  if (isFileWithPath) {
+    // 4
+    filePathNameArray.pop();
+    fileFullPath = ['src', ...filePathNameArray, fileFullName];
+  } else if (filePath) {
     // 3
     const filePathArray = filePath.split('/');
     fileFullPath = ['src', ...filePathArray, fileFullName];
