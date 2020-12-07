@@ -48,7 +48,7 @@ const componentGenerator = (api, options) => {
   // 在父组件里导入新生成的组件
   if (options.parent) {
     const componentImportStatement = getComponentImportStatement(options);
-    const parentComponentPath = getParentFilePath('component', options);
+    const parentComponentPath = getParentFilePath('component', api, options);
 
     api.injectImports(parentComponentPath, componentImportStatement);
   }

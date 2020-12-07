@@ -46,7 +46,7 @@ const storeGenerator = (api, options) => {
 
   // 在父 Store 模块里导入新生成的 Store 模块
   if (options.parent) {
-    const parentStorePath = getParentFilePath('store', options);
+    const parentStorePath = getParentFilePath('store', api, options);
     const storeImportStatement = getStoreImportStatement(options);
 
     api.injectImports(parentStorePath, storeImportStatement);

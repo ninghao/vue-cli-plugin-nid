@@ -73,11 +73,23 @@ const getGeneratedFilePath = (fileType, options) => {
 };
 
 /**
+ * 获取目标组件路径
+ */
+// const getTargetComponentPath = (api, options) => {
+//   return
+// };
+
+/**
  * 获取父辈文件路径
  */
-const getParentFilePath = (fileType, options) => {
-  // --parent comment/index/comment-index
-  const { parent } = options;
+const getParentFilePath = (fileType, api, options) => {
+  // --parent comment/index/comment-index || 按规定
+  // --parent comment-index || 去搜索
+  const { parent: parentFile } = options;
+
+  const parentArray = parentFile.split('/');
+  const isParentFileWithPath = parentArray.length > 1;
+
   let fileExtention = '';
 
   switch (fileType) {
@@ -90,18 +102,20 @@ const getParentFilePath = (fileType, options) => {
   }
 
   let parentFilePath = [];
+  let parentFileName = '';
 
-  const parentArray = parent.split('/');
-  const parentFileName = last(parentArray) + fileExtention;
-
-  if (parentArray.length > 1) {
+  if (isParentFileWithPath) {
+    parentFileName = last(parentArray) + fileExtention;
     parentArray.pop();
-    parentFilePath = ['src', ...parentArray, parentFileName];
+    parentFilePath = path.join(...['src', ...parentArray, parentFileName]);
+    console.log('1', parentFilePath);
   } else {
-    parentFilePath = ['src', ...parent.split('-'), parentFileName];
+    parentFilePath = Object.keys(api.generator.files).filter((file) =>
+      file.includes(`${parentFile}${fileExtention}`),
+    )[0];
   }
 
-  return path.join(...parentFilePath);
+  return parentFilePath;
 };
 
 /**
@@ -116,7 +130,16 @@ const getParentName = (options) => {
  * 获取导入路径
  */
 const getGeneratedFileImportPath = (fileType, options) => {
-  const { [fileType]: fileName, path: filePath } = options;
+  let { [fileType]: fileName, path: filePath } = options;
+
+  const fileNameArray = fileName.split('-');
+  const filePathNameArray = fileName.split('/');
+  const isFileWithPath = filePathNameArray.length > 1;
+  const isMultiWordsFile = fileNameArray.length > 1 && !isFileWithPath;
+
+  if (isFileWithPath) {
+    fileName = last(filePathNameArray);
+  }
 
   let fileFullName;
 
@@ -129,12 +152,15 @@ const getGeneratedFileImportPath = (fileType, options) => {
       break;
   }
 
-  const fileNameArray = fileName.split('-');
-  const isMultiWordsFile = fileNameArray.length > 1;
+  // const fileNameArray = fileName.split('-');
+  // const isMultiWordsFile = fileNameArray.length > 1;
 
   let fileImportPath = [];
 
-  if (filePath) {
+  if (isFileWithPath) {
+    filePathNameArray.pop();
+    fileImportPath = ['@', ...filePathNameArray, fileFullName];
+  } else if (filePath) {
     const filePathArray = filePath.split('/');
     fileImportPath = ['@', ...filePathArray, fileFullName];
   } else if (isMultiWordsFile) {

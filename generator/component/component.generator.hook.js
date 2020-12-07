@@ -18,7 +18,7 @@ const componentGeneratorHook = (api, options) => {
     if (!options.component || !options.parent) return;
 
     // 父组件路径
-    const parentComponentPath = getParentFilePath('component', options);
+    const parentComponentPath = getParentFilePath('component', api, options);
 
     // 父组件文件内容
     let parentFileContent = getProjectFileContent(parentComponentPath, api);
@@ -28,7 +28,7 @@ const componentGeneratorHook = (api, options) => {
     const { componentNamePascalCase } = getComponentName(options);
 
     // 插入内容
-    const insertComponentsOptionsContent = `${EOL}    ${componentNamePascalCase},`;
+    const insertComponentsOptionsContent = `    ${componentNamePascalCase},`;
 
     // 在父组件插入内容
     parentFileContent = insertFileContent({
@@ -44,7 +44,7 @@ const componentGeneratorHook = (api, options) => {
     const findWrapperElement = `<div class="${parentComponentName}">`;
 
     // 插入内容
-    const insertWrapperElementContent = `${EOL}    <${componentNamePascalCase} />`;
+    const insertWrapperElementContent = `    <${componentNamePascalCase} />`;
 
     // 在父组件插入内容
     parentFileContent = insertFileContent({

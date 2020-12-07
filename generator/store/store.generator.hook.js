@@ -46,7 +46,7 @@ const storeModuleGeneratorHook = (api, options) => {
   const storeModuleName = getStoreModuleName(options);
 
   // 父 Store 路径
-  const parentStorePath = getParentFilePath('store', options);
+  const parentStorePath = getParentFilePath('store', api, options);
 
   // 父 Store 文件内容
   let parentFileContent = getProjectFileContent(parentStorePath, api);
