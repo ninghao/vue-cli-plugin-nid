@@ -73,13 +73,6 @@ const getGeneratedFilePath = (fileType, options) => {
 };
 
 /**
- * 获取目标组件路径
- */
-// const getTargetComponentPath = (api, options) => {
-//   return
-// };
-
-/**
  * 获取父辈文件路径
  */
 const getParentFilePath = (fileType, api, options) => {
@@ -108,7 +101,6 @@ const getParentFilePath = (fileType, api, options) => {
     parentFileName = last(parentArray) + fileExtention;
     parentArray.pop();
     parentFilePath = path.join(...['src', ...parentArray, parentFileName]);
-    console.log('1', parentFilePath);
   } else {
     parentFilePath = Object.keys(api.generator.files).filter((file) =>
       file.includes(`${parentFile}${fileExtention}`),
@@ -151,9 +143,6 @@ const getGeneratedFileImportPath = (fileType, options) => {
       fileFullName = `${fileName}.store`;
       break;
   }
-
-  // const fileNameArray = fileName.split('-');
-  // const isMultiWordsFile = fileNameArray.length > 1;
 
   let fileImportPath = [];
 
