@@ -6,6 +6,8 @@ const {
   getProjectFileContent,
   insertFileContent,
   getParentName,
+  findReplaceFileContent,
+  findFileContent,
 } = require('../app/app.service');
 
 const { getComponentName } = require('./component.service');
@@ -23,6 +25,12 @@ const componentGeneratorHook = (api, options) => {
     // 父组件文件内容
     let parentFileContent = getProjectFileContent(parentComponentPath, api);
 
+    targetComponentFileContent = findReplaceFileContent({
+      fileContent: parentFileContent,
+      find: `components: {}`,
+      replace: [`  components: {`, `  },`],
+    });
+
     // 查找内容
     const findComponentsOptions = 'components: {';
     const { componentNamePascalCase } = getComponentName(options);
@@ -30,12 +38,19 @@ const componentGeneratorHook = (api, options) => {
     // 插入内容
     const insertComponentsOptionsContent = `    ${componentNamePascalCase},`;
 
-    // 在父组件插入内容
-    parentFileContent = insertFileContent({
+    const findRegisterComponentResult = findFileContent({
       fileContent: parentFileContent,
-      find: findComponentsOptions,
-      insert: insertComponentsOptionsContent,
+      find: `${componentNamePascalCase},`,
     });
+
+    if (!findRegisterComponentResult) {
+      // 在父组件插入内容
+      parentFileContent = insertFileContent({
+        fileContent: parentFileContent,
+        find: findComponentsOptions,
+        insert: insertComponentsOptionsContent,
+      });
+    }
 
     // 父组件名字
     const parentComponentName = getParentName(options);
@@ -46,12 +61,19 @@ const componentGeneratorHook = (api, options) => {
     // 插入内容
     const insertWrapperElementContent = `    <${componentNamePascalCase} />`;
 
-    // 在父组件插入内容
-    parentFileContent = insertFileContent({
+    const findUseComponentResult = findFileContent({
       fileContent: parentFileContent,
-      find: findWrapperElement,
-      insert: insertWrapperElementContent,
+      find: `<${componentNamePascalCase}`,
     });
+
+    if (!findUseComponentResult) {
+      // 在父组件插入内容
+      parentFileContent = insertFileContent({
+        fileContent: parentFileContent,
+        find: findWrapperElement,
+        insert: insertWrapperElementContent,
+      });
+    }
 
     // 写入父组件文件
     fs.writeFileSync(
