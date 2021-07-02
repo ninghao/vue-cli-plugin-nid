@@ -111,6 +111,14 @@ npm run generate:store -- comment-index --action getComments --resource comments
 npm run generate:store -- comment-index --action getComments --resource comments:Array:CommentListItem --pre --post
 ```
 
+**添加 State**
+
+在已经生成的 Store 里面，可以添加 State，默认会添加对应的 getter 还有 mutation。下面示例里会在 series-side-sheet（Store 模块文件名的一部分） 这个 Store 模块里添加一个叫 loading 的 State，类型是 boolean，默认值是 false。
+
+```
+npm run gss -- loading:boolean:false --to series-side-sheet
+```
+
 ## 导入
 你可以使用导入生成器，在项目现有的组件里导入使用其它的组件，也可以导入使用 Vuex 的帮手方法。
 
