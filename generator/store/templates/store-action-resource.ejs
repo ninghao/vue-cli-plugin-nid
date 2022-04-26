@@ -81,7 +81,11 @@ export const <%= storeModuleName %>: Module<<%= storeStateName %>, RootState> = 
       } catch (error) {
         commit('setLoading', false);
 
-        throw error.response;
+        const _error = error as any;
+
+        if (_error.response) {
+          throw _error.response;
+        }  
       }
     },<% if(pre) { %>
 
